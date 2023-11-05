@@ -5,6 +5,10 @@
 #include "alarm_clock.h"
 LinkedList::LinkedList() : first(0), mySize(0) {}
 
+// Definition of empty()
+bool LinkedList::empty() {
+    return mySize == 0;
+}
 //-- Definition of the destructor
 inline LinkedList::~LinkedList() {
     LinkedList::NodePointer prev = first, ptr;
@@ -15,3 +19,5 @@ inline LinkedList::~LinkedList() {
         prev = ptr;
     }
 }
+
+
