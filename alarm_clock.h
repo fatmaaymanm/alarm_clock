@@ -7,36 +7,37 @@ using namespace std;
 
 typedef int ElementType;
 
+
 class AlarmClock {
-private:
+
+public:
     class Node {
     public:
-        ElementType hours;
-        ElementType minutes;
-        ElementType seconds;
+        ElementType time;
         bool isAM;
         Node* next;
         Node() : next(0) {}
-        Node(ElementType hours, ElementType minutes, ElementType seconds, bool isAM) :
-        hours(hours), minutes(minutes), seconds(seconds), isAM(isAM), next(0){}
+        Node(ElementType time, bool isAM) : time(time), isAM(isAM), next(0) {}
     };
 
     typedef Node* NodePointer;
     NodePointer first;
     int mySize;
 
-public:
+
     AlarmClock();
     AlarmClock(const AlarmClock& origList);
     ~AlarmClock();
     bool empty();
-    void insert(ElementType hours, ElementType minutes, ElementType seconds, bool isAM);
-    void erase(ElementType hours, ElementType minutes, ElementType seconds, bool isAM);
+    void insert(ElementType time);
+    void erase(ElementType time);
     void display(ostream& out) const;
     int nodeCount();
     bool ascendingOrder();
-    void sort();
+    NodePointer sort(NodePointer head) const;
+    NodePointer middle(NodePointer head, NodePointer tail) const;
     void notify();
+    void update();
     const AlarmClock& operator=(const AlarmClock& rightSide);
     AlarmClock operator>(const AlarmClock& rightHandSide);
 };
