@@ -10,7 +10,7 @@ typedef int ElementType;
 
 class AlarmClock {
 
-public:
+private:
     class Node {
     public:
         ElementType time;
@@ -23,8 +23,7 @@ public:
     typedef Node* NodePointer;
     NodePointer first;
     int mySize;
-
-
+public:
     AlarmClock();
     AlarmClock(const AlarmClock& origList);
     ~AlarmClock();
@@ -34,7 +33,7 @@ public:
     void display(ostream& out) const;
     int nodeCount();
     bool ascendingOrder();
-    NodePointer sort(NodePointer head) const;
+    NodePointer sort(AlarmClock::NodePointer head);
     NodePointer middle(NodePointer head, NodePointer tail) const;
     void notify();
     void update();
