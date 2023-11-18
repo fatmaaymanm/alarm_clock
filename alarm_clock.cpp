@@ -56,8 +56,6 @@ istream& operator>>(istream& in, AlarmClock& aList) {
     aList.insert(val, aList.mySize); // Needed friend to access "mySize"
     return in;
 }
-bool operator > (const AlarmClock& c1, const AlarmClock& c2)
-{
-    return (c1.hours>c2.hours && c1.minutes> c2.minutes && c1.seconds > c2.seconds && c1.isAm);
-}
+
+
 
