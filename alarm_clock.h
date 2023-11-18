@@ -39,6 +39,7 @@ public:
     void update();
     const AlarmClock& operator=(const AlarmClock& rightSide);
     AlarmClock operator>(const AlarmClock& rightHandSide);
+    friend istream& operator>>(istream& in, AlarmClock& aList);
 };
 
 ostream& operator<<(ostream& out, const AlarmClock& aList);
