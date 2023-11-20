@@ -57,5 +57,121 @@ istream& operator>>(istream& in, AlarmClock& aList) {
     return in;
 }
 
+AlarmClock::NodePointer AlarmClock::middle(NodePointer head, NodePointer tail) const {
+    NodePointer slow = head;
+    NodePointer fast = head;
+
+    while(fast != tail && fast->next != tail){
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    NodePointer afterMiddle = slow->next;
+    slow->next = nullptr;
+    return afterMiddle;
+}
+
+AlarmClock::NodePointer AlarmClock::sort(AlarmClock::NodePointer head) {
+    if (first == nullptr || first->next == nullptr)
+        return first;
+
+    NodePointer tail = first;
+
+    while(tail->next){
+        tail = tail->next;
+    }
+
+    NodePointer part1 = sort(first);
+    NodePointer part2 = sort(middle(first, tail));
+
+    NodePointer curr1 = part1, curr2 = part2;
+    NodePointer si = nullptr, ei = nullptr;
+
+    while(curr1 && curr2) {
+        if (curr1->time - currentTime >= 0 && curr2->time - currentTime >= 0) {
+            if (curr1->time - currentTime <= curr2->time - currentTime) {
+                if (si == nullptr) {
+                    si = curr1;
+                    ei = curr1;
+                } else {
+                    ei->next = curr1;
+                    ei = curr1;
+                }
+                curr1 = curr1->next;
+            } else {
+                if (si == nullptr) {
+                    si = curr2;
+                    ei = curr2;
+                } else {
+                    ei->next = curr2;
+                    ei = curr2;
+                }
+                curr2 = curr2->next;
+            }
+        } else {
+            if (curr1->time - currentTime > curr2->time - currentTime) {
+                if (si == nullptr) {
+                    si = curr1;
+                    ei = curr1;
+                } else {
+                    ei->next = curr1;
+                    ei = curr1;
+                }
+                curr1 = curr1->next;
+            } else {
+                if (si == nullptr) {
+                    si = curr2;
+                    ei = curr2;
+                } else {
+                    ei->next = curr2;
+                    ei = curr2;
+                }
+                curr2 = curr2->next;
+            }
+        }
+    }
+
+    while(curr1){
+        ei->next = curr1;
+        ei = curr1;
+        curr1 = curr1->next;
+    }
+
+    while(curr2){
+        ei->next = curr2;
+        ei = curr2;
+        curr2 = curr2->next;
+    }
+
+    first = si;
+    return first;
+}
+
+void AlarmClock::display(ostream &out) const {
+    NodePointer ptr = first;
+    int hours, minutes, seconds;
+    for (int i = 0; i < mySize; ++i) {
+        seconds = ptr->time;
+        hours = seconds / 3600;
+        seconds -= hours * 3600;
+        minutes = seconds / 60;
+        seconds -= minutes * 60;
+        if (hours == 0 || hours == 12) {
+            out << "12:" << minutes << ':' << seconds << "  " << (ptr->isAM ? "AM" : "PM") << endl;
+        } else {
+            out << hours % 12 << ':' << minutes << ':' << seconds << (ptr->isAM ? "AM" : "PM") << endl;
+        }
+        ptr = ptr->next;
+    }
+}
+
+[[noreturn]] void AlarmClock::update() {
+    while (true) {
+        currentTime = (time(nullptr) + 7200) % 86400;
+        if (currentTime == first->time) {
+            notify();
+        }
+    }
+}
+
 
 

@@ -3,9 +3,12 @@
 #define ALARM_CLOCK
 
 #include <iostream>
+#include <chrono>
+#include <ctime>
 using namespace std;
 
 typedef int ElementType;
+int currentTime = (time(nullptr) + 7200) % 86400;
 
 
 class AlarmClock {
@@ -32,11 +35,11 @@ public:
     void erase(ElementType time);
     void display(ostream& out) const;
     int nodeCount();
-    bool ascendingOrder();
     NodePointer sort(AlarmClock::NodePointer head);
     NodePointer middle(NodePointer head, NodePointer tail) const;
     void notify();
-    void update();
+
+    [[noreturn]] void update();
     const AlarmClock& operator=(const AlarmClock& rightSide);
     AlarmClock operator>(const AlarmClock& rightHandSide);
     friend istream& operator>>(istream& in, AlarmClock& aList);
