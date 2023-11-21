@@ -20,7 +20,12 @@ private:
         bool isAM;
         Node* next;
         Node() : next(0) {}
-        Node(ElementType time, bool isAM) : time(time), isAM(isAM), next(0) {}
+        Node(ElementType time) : time(time), next(0) {
+            if (time < 43200)
+                isAM = true;
+            else
+                isAM = false;
+        }
     };
 
     typedef Node* NodePointer;
@@ -28,7 +33,6 @@ private:
     int mySize;
 public:
     AlarmClock();
-    AlarmClock(const AlarmClock& origList);
     ~AlarmClock();
     bool empty();
     void insert(ElementType time);

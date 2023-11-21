@@ -10,11 +10,7 @@ AlarmClock::AlarmClock() : first(0), mySize(0) {}
 bool AlarmClock::empty() {
     return mySize == 0;
 }
-//Definition of constructor()
-AlarmClock::AlarmClock() {
-  first = NULL;
-  mySize = 0;
-}
+
 //-- Definition of the destructor
 inline AlarmClock::~AlarmClock() {
     AlarmClock::NodePointer prev = first, ptr;
