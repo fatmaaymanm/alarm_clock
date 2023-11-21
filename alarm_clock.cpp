@@ -51,26 +51,20 @@ void AlarmClock::erase(int index) {
 // notify function
 
 void AlarmClock::notify() {
-    time_t currentTime = time(0);
-    tm* localTime = localtime(&currentTime);
-
-    int currentHour = localTime->tm_hour;
-    int currentMinute = localTime->tm_min;
-
-    NodePointer current = first;
-    while (current != nullptr) {
-        int alarmHour = current->time / 100;     // Extract hours
-        int alarmMinute = current->time % 100;   // Extract minutes
-
-        // Adjust for PM if needed
-        if (!current->isAM && alarmHour < 12) {
-            alarmHour += 12;
-        }
-
-        if (currentHour == alarmHour && currentMinute == alarmMinute) {
-            cout << "Alarm! Time: " << std::setw(2) << std::setfill('0') << alarmHour << ":"
-                 << std::setw(2) << std::setfill('0') << alarmMinute
-                 << " " << (current->isAM ? "AM" : "PM") << endl;
+     NodePointer ptr = first;
+     int hours, minutes, seconds;
+    
+        seconds = ptr->time;
+        hours = seconds / 3600;
+        seconds -= hours * 3600;
+        minutes = seconds / 60;
+        seconds -= minutes * 60;
+        if (hours == 0 || hours == 12) {
+            out <<" It's the alarm time!! "<< "12:" << setw(2) << setfill('0') << minutes <<  ':' << setw(2) << setfill('0')
+            << seconds << "  " << (ptr->isAM ? "AM" : "PM") << endl;
+        } else {
+            out<<" It's the alarm time!! " << setw(2) << setfill('0') << hours % 12 << ':' << setw(2) << setfill('0')
+            << minutes << ':' << setw(2) << setfill('0') << seconds << (ptr->isAM ? "AM" : "PM") << endl;
         }
         current = current->next;
     }
