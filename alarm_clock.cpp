@@ -101,7 +101,7 @@ ostream& operator<<(ostream& out, const AlarmClock& aList) {
 istream& operator>>(istream& in, AlarmClock& aList) {
     ElementType val;
     in >> val;
-    aList.insert(val, aList.mySize);
+    aList.insert(val);
     return in;
 }
 
