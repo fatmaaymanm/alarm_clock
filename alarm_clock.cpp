@@ -46,7 +46,7 @@ void AlarmClock::erase(int index) {
 }
 
 
------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------
 
 // notify function
 
@@ -76,7 +76,7 @@ void AlarmClock::notify() {
     }
 }
 
------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------
 
 //-- Definition of the output operator
 ostream& operator<<(ostream& out, const AlarmClock& aList) {
@@ -87,7 +87,7 @@ ostream& operator<<(ostream& out, const AlarmClock& aList) {
 istream& operator>>(istream& in, AlarmClock& aList) {
     ElementType val;
     in >> val;
-    aList.insert(val, aList.mySize); // Needed friend to access "mySize"
+    aList.insert(val, aList.mySize);
     return in;
 }
 
@@ -193,9 +193,11 @@ void AlarmClock::display(ostream &out) const {
         minutes = seconds / 60;
         seconds -= minutes * 60;
         if (hours == 0 || hours == 12) {
-            out << "12:" << minutes << ':' << seconds << "  " << (ptr->isAM ? "AM" : "PM") << endl;
+            out << "12:" << setw(2) << setfill('0') << minutes <<  ':' << setw(2) << setfill('0')
+            << seconds << "  " << (ptr->isAM ? "AM" : "PM") << endl;
         } else {
-            out << hours % 12 << ':' << minutes << ':' << seconds << (ptr->isAM ? "AM" : "PM") << endl;
+            out << setw(2) << setfill('0') << hours % 12 << ':' << setw(2) << setfill('0')
+            << minutes << ':' << setw(2) << setfill('0') << seconds << (ptr->isAM ? "AM" : "PM") << endl;
         }
         ptr = ptr->next;
     }
