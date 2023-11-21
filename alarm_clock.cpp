@@ -10,6 +10,11 @@ AlarmClock::AlarmClock() : first(0), mySize(0) {}
 bool AlarmClock::empty() {
     return mySize == 0;
 }
+//Definition of constructor()
+AlarmClock::AlarmClock() {
+  first = NULL;
+  mySize = 0;
+}
 //-- Definition of the destructor
 inline AlarmClock::~AlarmClock() {
     AlarmClock::NodePointer prev = first, ptr;
@@ -20,6 +25,22 @@ inline AlarmClock::~AlarmClock() {
         prev = ptr;
     }
 }
+//Definition of insert()
+void AlarmClock::insert(ElementType time) {
+   NodePointer newNode = new Node(time);
+   if (first == NULL) {
+    first = newNode;
+    mySize++;
+    return;
+  }
+ NodePointer current = first;
+  while (current->next != NULL) {
+    current = current->next;
+  }
+ current->next = newNode;
+  mySize++;
+}
+
 
 //-- Definition of erase()
 void AlarmClock::erase(int index) {
