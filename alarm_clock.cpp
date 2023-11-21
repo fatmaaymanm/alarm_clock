@@ -60,15 +60,14 @@ void AlarmClock::notify() {
         minutes = seconds / 60;
         seconds -= minutes * 60;
         if (hours == 0 || hours == 12) {
-            out <<" It's the alarm time!! "<< "12:" << setw(2) << setfill('0') << minutes <<  ':' << setw(2) << setfill('0')
+            cout <<" It's the alarm time!! "<< "12:" << setw(2) << setfill('0') << minutes <<  ':' << setw(2) << setfill('0')
             << seconds << "  " << (ptr->isAM ? "AM" : "PM") << endl;
         } else {
-            out<<" It's the alarm time!! " << setw(2) << setfill('0') << hours % 12 << ':' << setw(2) << setfill('0')
+            cout <<" It's the alarm time!! " << setw(2) << setfill('0') << hours % 12 << ':' << setw(2) << setfill('0')
             << minutes << ':' << setw(2) << setfill('0') << seconds << (ptr->isAM ? "AM" : "PM") << endl;
         }
-        current = current->next;
+
     }
-}
 
 //-----------------------------------------------------------------------------------------------------------------------------------
 
