@@ -31,7 +31,7 @@ public:
     AlarmClock(const AlarmClock& origList);
     ~AlarmClock();
     bool empty();
-    void insert(ElementType time, int mySize);
+    void insert(ElementType time);
     void erase(ElementType time);
     void display(ostream& out) const;
     int nodeCount();
