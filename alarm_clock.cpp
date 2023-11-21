@@ -105,6 +105,9 @@ AlarmClock::NodePointer AlarmClock::middle(NodePointer head, NodePointer tail) c
 }
 
 AlarmClock::NodePointer AlarmClock::sort(AlarmClock::NodePointer head) {
+
+    currentTime = (time(nullptr) + 7200) % 86400;
+
     if (first == nullptr || first->next == nullptr)
         return first;
 

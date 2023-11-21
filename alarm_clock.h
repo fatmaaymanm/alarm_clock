@@ -8,7 +8,7 @@
 using namespace std;
 
 typedef int ElementType;
-int currentTime = (time(nullptr) + 7200) % 86400;
+int currentTime;
 
 
 class AlarmClock {
