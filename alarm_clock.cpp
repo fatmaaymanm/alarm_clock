@@ -7,12 +7,12 @@
 AlarmClock::AlarmClock() : first(0), mySize(0) {}
 
 // Definition of empty()
-bool AlarmClock::empty() {
+bool AlarmClock::empty() const {
     return mySize == 0;
 }
 
 //-- Definition of the destructor
-inline AlarmClock::~AlarmClock() {
+/*inline*/ AlarmClock::~AlarmClock() {
     AlarmClock::NodePointer prev = first, ptr;
     while (prev != 0)
     {
@@ -35,6 +35,7 @@ void AlarmClock::insert(ElementType time) {
   }
  current->next = newNode;
   mySize++;
+  sort(first);
 }
 
 
@@ -70,7 +71,7 @@ void AlarmClock::erase(int index) {
 void AlarmClock::notify() {
      NodePointer ptr = first;
      int hours, minutes, seconds;
-    
+
         seconds = ptr->time;
         hours = seconds / 3600;
         seconds -= hours * 3600;
@@ -81,7 +82,7 @@ void AlarmClock::notify() {
             << seconds << "  " << (ptr->isAM ? "AM" : "PM") << endl;
         } else {
             cout <<" It's the alarm time!! " << setw(2) << setfill('0') << hours % 12 << ':' << setw(2) << setfill('0')
-            << minutes << ':' << setw(2) << setfill('0') << seconds << (ptr->isAM ? "AM" : "PM") << endl;
+            << minutes << ':' << setw(2) << setfill('0') << seconds << "  " << (ptr->isAM ? "AM" : "PM") << endl;
         }
 
     }
@@ -116,19 +117,21 @@ AlarmClock::NodePointer AlarmClock::middle(NodePointer head, NodePointer tail) c
 
 AlarmClock::NodePointer AlarmClock::sort(AlarmClock::NodePointer head) {
 
-    currentTime = (time(nullptr) + 7200) % 86400;
+    int currentTime = (time(nullptr) + 7200) % 86400;
 
-    if (first == nullptr || first->next == nullptr)
-        return first;
+    if (head == nullptr || head->next == nullptr)
+        return head;
 
-    NodePointer tail = first;
+    NodePointer tail = head;
 
     while(tail->next){
         tail = tail->next;
     }
 
-    NodePointer part1 = sort(first);
-    NodePointer part2 = sort(middle(first, tail));
+
+    NodePointer afterMiddle = middle(head, tail);
+    NodePointer part1 = sort(head);
+    NodePointer part2 = sort(afterMiddle);
 
     NodePointer curr1 = part1, curr2 = part2;
     NodePointer si = nullptr, ei = nullptr;
@@ -194,6 +197,11 @@ AlarmClock::NodePointer AlarmClock::sort(AlarmClock::NodePointer head) {
 }
 
 void AlarmClock::display(ostream &out) const {
+
+    if (empty()) {
+        cerr << "**** List is empty ****" << endl;
+        return;
+    }
     NodePointer ptr = first;
     int hours, minutes, seconds;
     for (int i = 0; i < mySize; ++i) {
@@ -204,10 +212,10 @@ void AlarmClock::display(ostream &out) const {
         seconds -= minutes * 60;
         if (hours == 0 || hours == 12) {
             out << "12:" << setw(2) << setfill('0') << minutes <<  ':' << setw(2) << setfill('0')
-            << seconds << "  " << (ptr->isAM ? "AM" : "PM") << endl;
+            << seconds << " " << (ptr->isAM ? "AM" : "PM") << endl;
         } else {
             out << setw(2) << setfill('0') << hours % 12 << ':' << setw(2) << setfill('0')
-            << minutes << ':' << setw(2) << setfill('0') << seconds << (ptr->isAM ? "AM" : "PM") << endl;
+            << minutes << ':' << setw(2) << setfill('0') << seconds << " " << (ptr->isAM ? "AM" : "PM") << endl;
         }
         ptr = ptr->next;
     }
@@ -215,9 +223,10 @@ void AlarmClock::display(ostream &out) const {
 
 [[noreturn]] void AlarmClock::update() {
     while (true) {
-        currentTime = (time(nullptr) + 7200) % 86400;
+        int currentTime = (time(nullptr) + 7200) % 86400;
         if (currentTime == first->time) {
             notify();
+            sort(first);
         }
     }
 }

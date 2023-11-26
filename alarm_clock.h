@@ -8,7 +8,6 @@
 using namespace std;
 
 typedef int ElementType;
-int currentTime;
 
 
 class AlarmClock {
@@ -34,9 +33,9 @@ private:
 public:
     AlarmClock();
     ~AlarmClock();
-    bool empty();
+    bool empty() const;
     void insert(ElementType time);
-    void erase(ElementType time);
+    void erase(int index);
     void display(ostream& out) const;
     int nodeCount();
     NodePointer sort(AlarmClock::NodePointer head);
