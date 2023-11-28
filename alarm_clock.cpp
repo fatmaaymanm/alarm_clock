@@ -229,12 +229,11 @@ void AlarmClock::display(ostream &out) const {
     for (;;) {
         sort(first);
         int currentTime = (time(nullptr) + 7200) % 86400;
-        if (currentTime == first->time && currentlyPrinting != currentTime) {
+        if (currentTime == first->time) {
             currentlyPrinting = currentTime;
             notify();
-            continue;
-        } else {
-            currentlyPrinting = -1;
+            while(currentlyPrinting == currentTime)
+                currentTime = (time(nullptr) + 7200) % 86400;
         }
     }
 }

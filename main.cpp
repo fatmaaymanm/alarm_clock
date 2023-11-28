@@ -27,7 +27,8 @@ int main() {
     alarmClock.insert(48900);
     alarmClock.insert(43199);
     alarmClock.insert(43200);
-    alarmClock.insert(38760);
+    alarmClock.insert(48060);
+    alarmClock.insert(48120);
 
     cout << alarmClock.empty() << endl;
 
