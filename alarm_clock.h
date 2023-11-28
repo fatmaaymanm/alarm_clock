@@ -43,8 +43,6 @@ public:
     void notify();
 
     [[noreturn]] void update();
-    const AlarmClock& operator=(const AlarmClock& rightSide);
-    AlarmClock operator>(const AlarmClock& rightHandSide);
     friend istream& operator>>(istream& in, AlarmClock& aList);
 };
 

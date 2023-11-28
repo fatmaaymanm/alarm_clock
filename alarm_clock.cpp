@@ -85,6 +85,8 @@ void AlarmClock::notify() {
             << minutes << ':' << setw(2) << setfill('0') << seconds << "  " << (ptr->isAM ? "AM" : "PM") << endl;
         }
 
+    sort(first);
+
     }
 
 //-----------------------------------------------------------------------------------------------------------------------------------
@@ -137,7 +139,8 @@ AlarmClock::NodePointer AlarmClock::sort(AlarmClock::NodePointer head) {
     NodePointer si = nullptr, ei = nullptr;
 
     while(curr1 && curr2) {
-        if (curr1->time - currentTime >= 0 && curr2->time - currentTime >= 0) {
+        if ((curr1->time - currentTime >= 0 && curr2->time - currentTime >= 0)
+        || (curr1->time - currentTime < 0 && curr2->time - currentTime < 0)) {
             if (curr1->time - currentTime <= curr2->time - currentTime) {
                 if (si == nullptr) {
                     si = curr1;
@@ -222,11 +225,16 @@ void AlarmClock::display(ostream &out) const {
 }
 
 [[noreturn]] void AlarmClock::update() {
-    while (true) {
+    int currentlyPrinting = -1;
+    for (;;) {
+        sort(first);
         int currentTime = (time(nullptr) + 7200) % 86400;
-        if (currentTime == first->time) {
+        if (currentTime == first->time && currentlyPrinting != currentTime) {
+            currentlyPrinting = currentTime;
             notify();
-            sort(first);
+            continue;
+        } else {
+            currentlyPrinting = -1;
         }
     }
 }
