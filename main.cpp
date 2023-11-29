@@ -32,13 +32,12 @@ int main() {
 
     cout << alarmClock.empty() << endl;
 
-    cout << alarmClock;
+    cout << alarmClock << endl;
 
     alarmClock.erase(4);
 
-    cout << alarmClock;
+    cout << alarmClock << endl;
 
     alarmClock.update();
 
-    return 0;
 }
