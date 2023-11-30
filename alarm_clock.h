@@ -37,10 +37,10 @@ public:
     void insert(ElementType time);
     void erase(int index);
     void display(ostream& out) const;
-    int nodeCount();
     NodePointer sort(AlarmClock::NodePointer head);
     NodePointer middle(NodePointer head, NodePointer tail) const;
     void notify();
+    int convert(int hours, int minutes, int seconds, bool AM);
 
     [[noreturn]] void update();
     friend istream& operator>>(istream& in, AlarmClock& aList);

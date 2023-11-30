@@ -245,5 +245,14 @@ void AlarmClock::display(ostream &out) const {
     }
 }
 
+int AlarmClock::convert(int hours, int minutes, int seconds, bool AM) {
+    if(AM && hours == 12)
+        return minutes * 60 + seconds;
+    else if (AM || hours == 12)
+        return hours * 3600 + minutes * 60 + seconds;
+    else
+        return 43200 + hours * 3600 + minutes * 60 + seconds;
+}
+
 
 
