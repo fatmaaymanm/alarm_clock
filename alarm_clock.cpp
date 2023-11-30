@@ -90,7 +90,7 @@ void AlarmClock::notify() {
             << minutes << ':' << setw(2) << setfill('0') << seconds << "  " << (ptr->isAM ? "AM" : "PM") << endl;
         }
 
-    sort(first);
+
 
     }
 
@@ -243,6 +243,7 @@ void AlarmClock::display(ostream &out) const {
             while(currentlyPrinting == currentTime)
                 currentTime = (time(nullptr) + 7200) % 86400;
         }
+        sort(first);
     }
 }
 
