@@ -25,7 +25,7 @@ AlarmClock::~AlarmClock() {
 void AlarmClock::insert(ElementType time) {
     if(time > 86399 || time < 0) {
         cerr << "Illegal time -- terminating execution";
-        return;
+        exit(1);
     }
     NodePointer newNode = new Node(time);
     if (first == NULL) {
