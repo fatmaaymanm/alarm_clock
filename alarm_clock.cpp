@@ -240,8 +240,8 @@ void AlarmClock::display(ostream &out) const {
             notify();
             while(currentlyPrinting == currentTime)
                 currentTime = (time(nullptr) + 7200) % 86400;
+            sort(first);
         }
-        sort(first);
     }
 }
 
