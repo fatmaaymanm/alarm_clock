@@ -22,12 +22,12 @@ AlarmClock::~AlarmClock() {
     }
 }
 //Definition of insert()
-void AlarmClock::insert(ElementType time) {
+void AlarmClock::insert(ElementType time, bool ON, bool Sun, bool Mon, bool Tue, bool Wed, bool Thu, bool Fri,  bool Sat) {
     if(time > 86399 || time < 0) {
         cerr << "Illegal time -- terminating execution";
         exit(1);
     }
-    NodePointer newNode = new Node(time);
+    NodePointer newNode = new Node(time, ON, Sun, Mon, Tue, Wed, Thu, Fri, Sat);
     if (first == NULL) {
         first = newNode;
         mySize++;
@@ -100,12 +100,12 @@ ostream& operator<<(ostream& out, const AlarmClock& aList) {
     return out;
 }
 
-istream& operator>>(istream& in, AlarmClock& aList) {
-    ElementType val;
-    in >> val;
-    aList.insert(val);
-    return in;
-}
+//istream& operator>>(istream& in, AlarmClock& aList) {
+//    ElementType val;
+//    in >> val;
+//    aList.insert(val);
+//    return in;
+//}
 
 AlarmClock::NodePointer AlarmClock::middle(NodePointer head, NodePointer tail) const {
     NodePointer slow = head;
@@ -114,10 +114,6 @@ AlarmClock::NodePointer AlarmClock::middle(NodePointer head, NodePointer tail) c
     while(fast != tail && fast->next != tail){
         slow = slow->next;
         fast = fast->next->next;
-        // 1 2 3
-        // 4 5
-        //     s a
-        //         f
     }
     NodePointer afterMiddle = slow->next;
     slow->next = nullptr;
@@ -235,10 +231,29 @@ void AlarmClock::display(ostream &out) const {
     for (;;) {
         int currentlyPrinting = -1;
         int currentTime = (time(nullptr) + 7200) % 86400;
-        if (currentTime == first->time) {
+        if (currentTime == first->time && first->ON) {
+            if (first->day[today]) {
+                currentlyPrinting = currentTime;
+                notify();
+                while (currentlyPrinting == currentTime)
+                    currentTime = (time(nullptr) + 7200) % 86400;
+                sort(first);
+            } else if(first->checkRepeat()) {
+                currentlyPrinting = currentTime;
+                notify();
+                while (currentlyPrinting == currentTime)
+                    currentTime = (time(nullptr) + 7200) % 86400;
+                first->ON = false;
+                sort(first);
+            } else {
+                currentlyPrinting = currentTime;
+                while (currentlyPrinting == currentTime)
+                    currentTime = (time(nullptr) + 7200) % 86400;
+                sort(first);
+            }
+        } else if (currentTime == first->time) {
             currentlyPrinting = currentTime;
-            notify();
-            while(currentlyPrinting == currentTime)
+            while (currentlyPrinting == currentTime)
                 currentTime = (time(nullptr) + 7200) % 86400;
             sort(first);
         }
@@ -254,5 +269,26 @@ int AlarmClock::convert(int hours, int minutes, int seconds, bool AM) {
         return 43200 + hours * 3600 + minutes * 60 + seconds;
 }
 
+void AlarmClock::getToday() {
+    time_t t = time(nullptr);
+    today = localtime(&t)->tm_wday;
+}
 
 
+void AlarmClock::Node::manageAlarm() {
+    Sun ? day[0] = true : day[0] = false;
+    Mon ? day[1] = true : day[1] = false;
+    Tue ? day[2] = true : day[2] = false;
+    Wed ? day[3] = true : day[3] = false;
+    Thu ? day[4] = true : day[4] = false;
+    Fri ? day[5] = true : day[5] = false;
+    Sat ? day[6] = true : day[6] = false;
+}
+
+bool AlarmClock::Node::checkRepeat() {
+    for (int i = 0; i < 7; ++i) {
+        if (day[i])
+            return false;
+    }
+    return true;
+}
