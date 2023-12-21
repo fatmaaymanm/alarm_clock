@@ -144,7 +144,7 @@ AlarmClock::NodePointer AlarmClock::sort(NodePointer head) {
     while(curr1 && curr2) {
         if ((curr1->time - currentTime >= 0 && curr2->time - currentTime >= 0)
         || (curr1->time - currentTime < 0 && curr2->time - currentTime < 0)) {
-            if (curr1->time - currentTime <= curr2->time - currentTime) {
+            if (curr1->time - currentTime < curr2->time - currentTime) {
                 if (si == nullptr) {
                     si = curr1;
                     ei = curr1;
@@ -153,6 +153,55 @@ AlarmClock::NodePointer AlarmClock::sort(NodePointer head) {
                     ei = curr1;
                 }
                 curr1 = curr1->next;
+            } else if (curr1->time - currentTime == curr2->time - currentTime) {
+                if (curr1->ON && !curr2->ON) {
+                    if (si == nullptr) {
+                        si = curr1;
+                        ei = curr1;
+                    } else {
+                        ei->next = curr1;
+                        ei = curr1;
+                    }
+                    curr1 = curr1->next;
+                } else if (curr1->ON && curr2->ON) {
+                    if ((curr1->day[today]) || curr1->checkRepeat()) {
+                        if (si == nullptr) {
+                            si = curr1;
+                            ei = curr1;
+                        } else {
+                            ei->next = curr1;
+                            ei = curr1;
+                        }
+                        curr1 = curr1->next;
+                    } else if (curr2->day[today] || curr2->checkRepeat()) {
+                        if (si == nullptr) {
+                            si = curr2;
+                            ei = curr2;
+                        } else {
+                            ei->next = curr2;
+                            ei = curr2;
+                        }
+                        curr2 = curr2->next;
+                    } else {
+                        if (si == nullptr) {
+                            si = curr2;
+                            ei = curr2;
+                        } else {
+                            ei->next = curr2;
+                            ei = curr2;
+                        }
+                        curr2 = curr2->next;
+                    }
+                } else {
+                    if (si == nullptr) {
+                        si = curr2;
+                        ei = curr2;
+                    } else {
+                        ei->next = curr2;
+                        ei = curr2;
+                    }
+                    curr2 = curr2->next;
+                }
             } else {
                 if (si == nullptr) {
                     si = curr2;
