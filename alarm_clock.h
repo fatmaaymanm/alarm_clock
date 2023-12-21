@@ -58,10 +58,11 @@ public:
     void notify();
     int convert(int hours, int minutes, int seconds, bool AM);
     void getToday();
+    void turnOff(ElementType time);
 
 
     [[noreturn]] void update();
-    friend istream& operator>>(istream& in, AlarmClock& aList);
+    //friend istream& operator>>(istream& in, AlarmClock& aList);
 };
 
 ostream& operator<<(ostream& out, const AlarmClock& aList);

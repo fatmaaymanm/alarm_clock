@@ -28,6 +28,7 @@ void AlarmClock::insert(ElementType time, bool ON, bool Sun, bool Mon, bool Tue,
         exit(1);
     }
     NodePointer newNode = new Node(time, ON, Sun, Mon, Tue, Wed, Thu, Fri, Sat);
+    newNode->manageAlarm();
     if (first == NULL) {
         first = newNode;
         mySize++;
@@ -284,12 +285,14 @@ void AlarmClock::display(ostream &out) const {
             if (first->day[today]) {
                 currentlyPrinting = currentTime;
                 notify();
+                turnOff(currentTime);
                 while (currentlyPrinting == currentTime)
                     currentTime = (time(nullptr) + 7200) % 86400;
                 sort(first);
             } else if(first->checkRepeat()) {
                 currentlyPrinting = currentTime;
                 notify();
+                turnOff(currentTime);
                 while (currentlyPrinting == currentTime)
                     currentTime = (time(nullptr) + 7200) % 86400;
                 first->ON = false;
@@ -340,4 +343,14 @@ bool AlarmClock::Node::checkRepeat() {
             return false;
     }
     return true;
+}
+
+void AlarmClock::turnOff(ElementType time) {
+    NodePointer ptr = first;
+    while (ptr->time == time) {
+        if (ptr->checkRepeat()) {
+            ptr->ON = false;
+        }
+        ptr = ptr->next;
+    }
 }
