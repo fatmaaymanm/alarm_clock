@@ -1,12 +1,15 @@
 #include <iostream>
-using namespace std;
+#include <fstream>
+#include <cstring>
+#include <string>
 #include "alarm_clock.h"
 
-int main() {
+using namespace std;
 
+
+int main() {
     AlarmClock alarmClock;
     alarmClock.getToday();
-    cout << alarmClock;
-    alarmClock.update();
-
+    alarmClock.readFromFile();
+    cout << alarmClock << endl;
 }

@@ -4,6 +4,9 @@
 #include <iomanip> // Include this for std::setw
 #include <ctime>
 #include "alarm_clock.h"
+#include <fstream>
+#include <cstring>
+#include <string>
 AlarmClock::AlarmClock() : first(0), mySize(0) {}
 
 // Definition of empty()
@@ -41,6 +44,7 @@ void AlarmClock::insert(ElementType time, bool ON, bool Sun, bool Mon, bool Tue,
     current->next = newNode;
     mySize++;
     sort(first);
+    writeToFile();
 }
 
 
@@ -64,6 +68,7 @@ void AlarmClock::erase(int index) {
         ptr = predPtr->next;
         predPtr->next = ptr->next;
         delete ptr;
+        writeToFile();
     }
 }
 
@@ -289,6 +294,7 @@ void AlarmClock::display(ostream &out) const {
                 while (currentlyPrinting == currentTime)
                     currentTime = (time(nullptr) + 7200) % 86400;
                 sort(first);
+                writeToFile();
             } else if(first->checkRepeat()) {
                 currentlyPrinting = currentTime;
                 notify();
@@ -297,17 +303,20 @@ void AlarmClock::display(ostream &out) const {
                     currentTime = (time(nullptr) + 7200) % 86400;
                 first->ON = false;
                 sort(first);
+                writeToFile();
             } else {
                 currentlyPrinting = currentTime;
                 while (currentlyPrinting == currentTime)
                     currentTime = (time(nullptr) + 7200) % 86400;
                 sort(first);
+                writeToFile();
             }
         } else if (currentTime == first->time) {
             currentlyPrinting = currentTime;
             while (currentlyPrinting == currentTime)
                 currentTime = (time(nullptr) + 7200) % 86400;
             sort(first);
+            writeToFile();
         }
     }
 }
@@ -353,4 +362,44 @@ void AlarmClock::turnOff(ElementType time) {
         }
         ptr = ptr->next;
     }
+}
+
+void AlarmClock::writeToFile() {
+    ofstream outputFile;
+    outputFile.open("myAlarms.txt", ios::trunc);
+    NodePointer ptr = first;
+    while (ptr != nullptr) {
+        outputFile << ptr->time << " " << (ptr->ON ? "1" : "0") << " " << (ptr->Sun ? "1" : "0") << " "
+        << (ptr->Mon ? "1" : "0") << " " << (ptr->Tue ? "1" : "0") << " " << (ptr->Wed ? "1" : "0") << " "
+        << (ptr->Thu ? "1" : "0") << " " << (ptr->Fri ? "1" : "0") << " " << (ptr->Sat ? "1" : "0") << endl;
+        ptr = ptr->next;
+    }
+    outputFile.close();
+}
+
+void AlarmClock::readFromFile() {
+    char alarm[22];
+    char *p;
+    int alarm_data[9];
+    int i = 0;
+    ifstream inputFile;
+    inputFile.open("myAlarms.txt", ios::in);
+    while (inputFile.good()) {
+        inputFile.getline(alarm, 22);
+        if (inputFile.eof())
+            break;
+        p = strtok(alarm, " ");
+        while (p != nullptr) {
+            alarm_data[i] = stoi(p);
+            if (i == 9)
+                break;
+            p = strtok(nullptr, " ");
+            i++;
+        }
+        i = 0;
+        insert(alarm_data[0], alarm_data[1], alarm_data[2], alarm_data[3], alarm_data[4],
+               alarm_data[5],alarm_data[6], alarm_data[7],alarm_data[8]);
+    }
+    inputFile.close();
+
 }

@@ -34,8 +34,6 @@ private:
                 isAM = true;
             else
                 isAM = false;
-
-
         }
         void manageAlarm();
         bool checkRepeat();
@@ -59,6 +57,8 @@ public:
     int convert(int hours, int minutes, int seconds, bool AM);
     void getToday();
     void turnOff(ElementType time);
+    void readFromFile();
+    void writeToFile();
 
 
     [[noreturn]] void update();
