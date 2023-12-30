@@ -54,11 +54,14 @@ public:
     NodePointer sort(AlarmClock::NodePointer head);
     NodePointer middle(NodePointer head, NodePointer tail) const;
     void notify();
-    int convert(int hours, int minutes, int seconds, bool AM);
+    int convertToSeconds(int hours, int minutes, int seconds, bool AM);
     void getToday();
     void turnOff(ElementType time);
     void readFromFile();
     void writeToFile();
+    void getAlarmInfo(NodePointer ptr, int &hours, int &minutes, int &seconds, bool &AM, bool &Sun, bool &Mon,
+                      bool &Tue, bool &Wed, bool &Thu, bool &Fri, bool &Sat);
+    NodePointer getFirst();
 
 
     [[noreturn]] void update();

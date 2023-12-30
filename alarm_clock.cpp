@@ -321,7 +321,7 @@ void AlarmClock::display(ostream &out) const {
     }
 }
 
-int AlarmClock::convert(int hours, int minutes, int seconds, bool AM) {
+int AlarmClock::convertToSeconds(int hours, int minutes, int seconds, bool AM)  {
     if(AM && hours == 12)
         return minutes * 60 + seconds;
     else if (AM || hours == 12)
@@ -403,3 +403,29 @@ void AlarmClock::readFromFile() {
     inputFile.close();
 
 }
+
+void AlarmClock::getAlarmInfo(NodePointer ptr, int &hours, int &minutes, int &seconds, bool &AM, bool &Sun, bool &Mon,
+                              bool &Tue, bool &Wed, bool &Thu, bool &Fri, bool &Sat) {
+    seconds = ptr->time;
+    hours = seconds / 3600;
+    seconds -= hours * 3600;
+    if (hours == 0 || hours == 12)
+        hours = 12;
+    else
+        hours = hours % 12;
+    minutes = seconds / 60;
+    seconds -= minutes * 60;
+    AM = ptr->isAM;
+    Sun = ptr->Sun;
+    Mon = ptr->Mon;
+    Tue = ptr->Tue;
+    Wed = ptr->Wed;
+    Thu = ptr->Thu;
+    Fri = ptr->Fri;
+    Sat = ptr->Sat;
+}
+
+AlarmClock::NodePointer AlarmClock::getFirst() {
+    return first;
+}
+
